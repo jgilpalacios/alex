@@ -1,0 +1,83 @@
+<head>
+<meta charset="UTF-8">
+<title></title>
+<script Language="JavaScript">
+function aASCII(texto,base,base2){
+	var i=0;
+	var cad=[];
+	texto=texto.toUpperCase();
+	texto=texto.split(",");
+	if (texto.length==1)texto[1]='';
+	var decimales=texto[1].length;
+	texto=texto[0]+texto[1];
+	do {
+		var res=texto.charCodeAt(i++)-48;
+		if (res>9) res-=7;
+		if (!isNaN(res)) cad[cad.length]=+res;
+		//alert(res);
+	} while (!isNaN(res));
+	//alert(cad);
+        var valor_dec=0;
+	for (var i=0;i<cad.length;i++){
+		valor_dec=base*valor_dec+cad[i];
+	}
+	valor_dec=valor_dec/Math.pow(base,decimales);
+	//alert(valor_dec);
+	/*alert(valor_dec);
+	alert(ConvierteA(valor_dec,2));
+	alert(ConvierteA(valor_dec,8));
+	alert(ConvierteA(valor_dec,10));
+        alert(ConvierteA(valor_dec,16));*/
+	return ConvierteA(valor_dec,base2);
+}
+function ConvierteA(num,base){
+	res='';
+	//var cifras=['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
+	if(base==10){//si es base 10 simplemente cambiamos el punto por la coma
+		var aux=(''+num).split('.');
+		if (aux.length==1)aux[1]='';
+		return aux[0]+','+aux[1];
+	}
+	var entera=Math.floor(num);
+	var dec=num-entera;
+	while(entera>=base){
+		var aux=entera%base;
+		var aux2=aux+48;
+		if (aux2>=58)aux2+=7;
+		res=String.fromCharCode(aux2)+res;
+		entera=(entera-aux)/base;
+	}
+	var aux=entera+48;
+	if (aux>=58)aux+=7;
+	res=String.fromCharCode(aux)+res+',';
+	var pot=1;
+	while(dec>0.00000000001){
+		pot=pot/base;
+		var aux=Math.floor(dec/pot);
+		var aux2=aux+48;
+		if (aux2>=58)aux2+=7;
+		res=res+String.fromCharCode(aux2);
+		dec=dec-aux*pot;//alert(dec);
+	}
+	return res;
+}
+function aTexto(texto){
+	var res = texto.split(",");
+	var cad='';
+	for(var i=0;i<res.length;i++){
+		if(res[i]=='')break;
+		var ii=String.fromCharCode(res[i]);
+		cad+=ii;
+	} 
+	//alert(cad);
+	return cad;
+}
+</script>
+</head>
+<body>
+NÚMERO<input name="valor" id="texto"> EN BASE<input name="valor" id="base" maxlength="2" size="2"><input value="A BASE" name="A BASE" type="button" onclick="document.getElementById('ASCII').value=aASCII(document.getElementById('texto').value,document.getElementById('base').value, document.getElementById('base2').value)"><input name="valor" id="base2" maxlength="2" size="2"><br>
+<input name="valor" id="ASCII"><br>
+<br>
+<br>
+</body>
+</html>
